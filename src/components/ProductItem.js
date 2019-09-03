@@ -2,11 +2,13 @@ import React from 'react';
 import { connect } from 'react-redux';
 import StarRatings from 'react-star-ratings';
 import { addToCart } from '../redux/actions/addToCartAction';
-import { vote } from '../redux/actions/voteAction';
 class ProductItem extends React.Component {
 
 	constructor(props) {
 		super(props);
+		this.state = {
+			rating:0
+		}
 
 		this.submit = this.submit.bind(this);
 		this.changeRating = this.changeRating.bind(this);
@@ -15,12 +17,14 @@ class ProductItem extends React.Component {
 
 	handleInputChange = event => this.setState({[event.target.name]: event.target.value})
 
-	changeRating(newRating) {		
-		this.props.dispatch(vote(newRating, this.product));
+	changeRating(newRating) {
+		console.log(newRating)		
+		this.setState({
+			rating: newRating
+		})
 	  }
 
-	  submit(product) {
-		  console.log("here")
+	  submit(product) {  
 		  this.props.dispatch(addToCart(product));
 	  }
 
@@ -38,7 +42,7 @@ class ProductItem extends React.Component {
 				<div>
 				 <StarRatings
 				 starRatedColor="yellow"
-				 rating={this.props.rating}
+				 rating={this.state.rating}
 				 changeRating={this.changeRating}
 				 numberOfStars={5}
 				 name= "product" 
@@ -59,7 +63,7 @@ class ProductItem extends React.Component {
 
 const mapStateToProps = (state) => ({ 
 	quantity: state.quantity,
-	rating: state.vote.rating
+	rating: state.vote.rating.rating
 });
 
 const mapDispatchToProps = (dispatch) => {
